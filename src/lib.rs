@@ -6,14 +6,11 @@ use std::fs::File;
 use std::error::Error;
 use std::os::fd::FromRawFd;
 
-use futures::executor;
-
 use crate::nsod_cfg::NsodCfgInject;
 
 pub mod cfg_lib;
 pub mod nsod_cfg;
 pub mod route;
-pub mod vault;
 
 
 fn __nsod_get_cfg() -> Result<NsodCfgInject, Box<dyn Error>> {
@@ -46,7 +43,7 @@ pub extern "C" fn __nsod_rust_request(path_raw: *const c_char, fd: i32) -> i32 {
                 let mut pipe_file = File::from_raw_fd(fd);
 
                 //let r = async {
-                    match executor::block_on(cfg.secret_query(&path)) {
+                    match cfg.secret_query(&path) {
                         Some(secret) => {
                             pipe_file.write(secret.as_slice()).expect("NSOD: invalid fd violates safety contract");
                             return 0; // Normal return.

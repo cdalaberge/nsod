@@ -1,8 +1,6 @@
 use std::env;
 use serde::{Serialize, Deserialize};
 
-use crate::vault::{VaultSource};
-
 #[derive(Serialize, Deserialize)]
 pub struct NsodRoute {
     pub path: String,
@@ -12,7 +10,6 @@ pub struct NsodRoute {
 #[derive(Serialize, Deserialize)]
 pub enum NsodSource {
     Simple(SimpleSource),
-    Vault(VaultSource),
 }
 
 
@@ -43,10 +40,9 @@ impl SimpleSource {
 
 impl NsodSource {
 
-    pub async fn get_secret(&self) -> Vec<u8> {
+    pub fn get_secret(&self) -> Vec<u8> {
         match &self {
             NsodSource::Simple(source) => return source.get_secret(),
-            NsodSource::Vault(source) => return source.get_secret().await,
         }
     }
 }

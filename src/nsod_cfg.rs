@@ -59,11 +59,11 @@ impl NsodCfg {
 }
 
 impl NsodCfgInject {
-    pub async fn secret_query(&self, path: &str) -> Option<Vec<u8>> {
+    pub fn secret_query(&self, path: &str) -> Option<Vec<u8>> {
 
         for route in self.routes.iter() {
             if route.path == path {
-                return Some(route.source.get_secret().await); // Path in cfg: get secret from source.
+                return Some(route.source.get_secret()); // Path in cfg: get secret from source.
             }
         }
 

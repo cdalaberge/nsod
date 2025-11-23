@@ -7,7 +7,6 @@ pub mod ui;
 pub mod cmd;
 pub mod cfg_ui;
 pub mod cfg_lib;
-pub mod vault;
 pub mod run;
 
 fn main() {
