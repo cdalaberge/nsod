@@ -17,6 +17,11 @@ pub fn __nsod_run (argv: &Vec<String>) -> Result<i32, Box<dyn std::error::Error>
 
     let cfg = NsodCfg::from_import(&argv[2], crate::base_cfg_dir_path!())?;
 
+    if !cfg.validate() {
+        println!("Exiting...");
+        std::process::exit(1);
+    }
+
     let exec_path: CString = CString::new(cfg.wrapper.bin)?;
 
     // Setup argv.

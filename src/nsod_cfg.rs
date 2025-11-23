@@ -2,6 +2,7 @@ use std::fs::{File, read};
 use serde::{Serialize, Deserialize};
 use std::error::Error;
 
+use std::fs::canonicalize;
 
 use crate::route::{NsodRoute};
 
@@ -22,6 +23,19 @@ pub struct NsodCfgWrapper {
 }
 
 impl NsodCfg {
+
+    pub fn validate(&self) -> bool {
+        for route in &self.inject.routes {
+            let this_path = std::path::Path::new(&route.path);
+            if !this_path.is_absolute() {
+                println!("Validation failed: route path {0} is not absolute.", route.path);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     pub fn from_import(cfg_name: &str, dir_path: &str) -> Result<NsodCfg, Box<dyn Error>> {
         let path_inj = format!("{dir_path}/{cfg_name}_inject.json");
         let path_wrap = format!("{dir_path}/{cfg_name}_wrapper.json");
@@ -61,8 +75,10 @@ impl NsodCfg {
 impl NsodCfgInject {
     pub fn secret_query(&self, path: &str) -> Option<Vec<u8>> {
 
+        let abs_path = canonicalize(path).expect("NSOD: Open was called with an invalid path"); // We actually might be able to handle this one by returning -1...
+
         for route in self.routes.iter() {
-            if route.path == path {
+            if abs_path == canonicalize(&route.path).expect("NSOD: inavlid path in cfg.") { // This expect should never trigger since we validate all paths.
                 return Some(route.source.get_secret()); // Path in cfg: get secret from source.
             }
         }
