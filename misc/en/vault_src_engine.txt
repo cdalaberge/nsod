@@ -1,0 +1,6 @@
+=================================
+Select secret engine:
+
+    (1): AWS.
+    (2): Key/value v1 (Returns value for a specified key).
+    (3): Key/value v2 (Returns *entire* serialized object! ONLY USE IF APPLICATION IS EXPECTING THIS!!).

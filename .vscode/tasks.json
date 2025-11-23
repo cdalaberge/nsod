@@ -1,0 +1,78 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Cargo: Build rust component",
+			"command": "cargo",
+			"args": [
+				"build"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$rustc"
+			],
+			"group": "build",
+			"detail": "compiler: cargo"
+		},
+		{
+			"type": "shell",
+			"label": "Copy rust component",
+			"command": "cp",
+			"args": [
+				"./target/debug/libnsod_rust.so",
+				"./dev"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"group": "build",
+			"detail": "compiler: cargo"
+		},
+		{
+			"type": "cppbuild",
+			"label": "C/C++: gcc build c component",
+			"command": "/usr/bin/gcc",
+			"dependsOn": [
+                "Cargo: Build rust component",
+				"Copy rust component"
+            ],
+			"args": [
+				"-fdiagnostics-color=always",
+				"-shared",
+				"-fPIC",
+				"-L.",
+				"-lnsod_rust",
+				"-I",
+				"${workspaceFolder}/c",
+				"-g",
+				"../c/nsod_open_hook.c",
+				"-o",
+				"libnsod_open_hook.so"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/dev"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "compiler: /usr/bin/gcc"
+		},
+		{
+            "label": "Build All",
+            "type": "shell",
+            "command": "echo 'All tasks finished'",
+            "dependsOn": [
+                "Cargo: Build rust component",
+                "C/C++: gcc build c component"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+	]
+}

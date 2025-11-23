@@ -1,0 +1,20 @@
+=================================
+NSOD supports several different "sources", which are methods of getting a secret into the hooked process.
+
+This source is required for HashiCorp Vault credentials, so Vault itself is not avaliable!!
+
+If you want to source Vault credentials from a different Vault,
+please do so externally and use one of the sources below to pipe them in.
+
+These sources are listed below, with some of their pros and cons:
+
+    (1): Environment Variable: The program will retrieve the secret from the specified environment variable.
+        [+] Simple.
+        [-] Vulnerable to being leaked in some situations.
+
+    (2): File: The process gets the data from an arbitrary file.
+        [+] Allows using ephemeral filesystems that store their data in RAM.
+        [-] Slower than a standard open() or using a symlink.
+        [-] Security requires underlying filesystem support: may not be useful in some containers.
+
+Please select a source for the selected credential:

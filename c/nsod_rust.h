@@ -1,0 +1,1 @@
+int __nsod_rust_request(const char * path, int fd);

@@ -1,0 +1,14 @@
+nsod [mode]
+
+mode:
+    configure
+        Create/modify nsod config files.
+
+    run <config name> <argv>
+        Execute program specified in "!!!**CFG PATH**!!!/<config name>.json".
+
+    usage
+        Print this help screen.
+
+    help
+        Print advanced help/info screen.

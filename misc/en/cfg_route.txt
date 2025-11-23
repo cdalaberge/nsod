@@ -1,0 +1,13 @@
+=================================
+A "route" consists of a link between an absolute path and a data source.
+If the hooked program tries to use open() to open the file specified in a given route:
+    1. The file is never opened.
+    2. NSOD retrieves the secret data from the corresponding source.
+    3. NSOD puts that data into a pipe, resulting in the data being buffered in the kernel.
+    4. The program receives a file descriptor, allowing it to access the secret as if it was being read from a file.
+
+NSOD supports an arbitrary number of routes, each linking a single path to a single source, limited only by the maximum length of an environment variable.
+If multiple routes specify the same path, only the first route will be used.
+Multiple routes *can* use the same source.
+
+Enter absolute path to intercept:

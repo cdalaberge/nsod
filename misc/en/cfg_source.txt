@@ -1,0 +1,22 @@
+=================================
+NSOD supports several different "sources", which are methods of getting a secret into the hooked process.
+
+These sources are listed below, with some of their pros and cons:
+
+    (1): Environment Variable: The program will retrieve the secret from the specified environment variable.
+        [+] Simple.
+        [-] Vulnerable to being leaked in some situations.
+
+    (2): HashiCorp Vault Client: The process creates a Vault client with specified configuration, retrieves Vault credentials from other sources, then attempts to retrieve the secret from Vault.
+        [+] Extremely secure.
+        [+] Easy rotation of secrets.
+        [-] Complex configuration with poor error handling if config is bad.
+        [-] Slow, especially if secrets are accessed many times.
+        [-] Failing to retrieve the secret results in a crash.
+
+    (3): File: The process gets the data from an arbitrary file.
+        [+] Allows using ephemeral filesystems that store their data in RAM.
+        [-] Slower than a standard open() or using a symlink.
+        [-] Security requires underlying filesystem support: may not be useful in some containers.
+
+Please enter the number of the source you wish to use:

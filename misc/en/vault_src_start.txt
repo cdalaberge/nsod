@@ -1,0 +1,30 @@
+=================================
+Setting vault as a source requires more complex configuration than the other sources.
+First, you will be asked for, in order:
+
+    1. The address of the Vault server.
+    2. Whether to verify responses (true/false).
+    3. (Optional) Timeout (seconds).
+    4. (Optional) Vault namespace.
+    5. The secret engine to use (AWS and KV1/2 are supported).
+    6. Vault mount: used for login and request.
+
+Next, you will input the information needed to get your secret out of the Vault.
+This varies based on the secret engine:
+
+    AWS:
+        1. Access key.
+        2. Secret key.
+
+    KV1:
+        1. Path.
+        2. Key.
+
+    KV2:
+        1. Path.
+
+Finally, you will select a method of Vault authentication (identity or token) and provide an NSOD source for that credential.
+
+DO NOT ENTER CREDENTIALS INTO ANY OF THESE PROMPTS!
+
+(Press ENTER to continue)

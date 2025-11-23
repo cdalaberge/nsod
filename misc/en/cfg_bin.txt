@@ -1,0 +1,5 @@
+=================================
+Please enter an absolute path to the executable you want to hook.
+When you use "nsod run [config name]", the NSOD wrapper will execute this program with the hook in place.
+
+Absolute path:
