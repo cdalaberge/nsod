@@ -1,1 +1,0 @@
-Enter time in seconds: (must be an integer >= 1)

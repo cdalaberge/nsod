@@ -37,8 +37,6 @@ pub fn __nsod_run (argv: &Vec<String>) -> Result<i32, Box<dyn std::error::Error>
     // Inject NSOD config
     let cfg_string = serde_json::to_string(&cfg.inject)?;
 
-    println!("{}", cfg_string);
-
     let cfg_key = String::from_str(crate::cfg_env!())?;
     exec_envp.push(CString::new(format!("{cfg_key}={cfg_string}"))?);
 

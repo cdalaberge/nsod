@@ -10,27 +10,9 @@ macro_rules! db_en {
             "cfg_route",
             "cfg_add_route",
             "cfg_source",
-            "cfg_source_simple",
+
             "input_src_env",
             "input_src_file",
-
-            "vault_src_start",
-            "vault_src_engine",
-            "vault_src_addr",
-            "vault_src_verify",
-            "vault_src_timeout_yn",
-            "vault_src_timeout_s",
-            "vault_src_namespace_yn",
-            "vault_src_namespace_str",
-
-            "kv_mount",
-            "kv_key",
-            "kv_path",
-
-            "vault_cred",
-            "vault_identity_name",
-
-            "invalid_addr",
         ]
     };
 }

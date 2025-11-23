@@ -10,13 +10,6 @@ Functionality:
     Instead, the calling program will receive a file descriptor containing data from another source.
     This data is buffered in the kernel and never written to disk (https://man7.org/linux/man-pages/man2/pipe.2.html).
 
-    Sources include:
-
-        Environment variable: simply include the secret in the specified environment variable.
-
-        HashiCorp Vault: the hooked program will build a Vault client based on data in NSOD's config and attempt to retrieve the secret. Credentials (i.e. Vault tokens/certificates/passwords) must be injected via any of the other sources.
-        
-        File: retrieve the secret from a file other than the one originally opened. Allows circumventing hardcoded paths to read from more secure sources, such as ephemeral filesystems.
 
     When the opened path is not included in NSOD's configuration, the file is opened as usual.
     This also occurs when the open mode is set to anything other than readonly.
@@ -40,9 +33,4 @@ Security:
     
 Performance:
 
-    When using Vault as a source, NSOD has to retrieve the secret from the central Vault server. (???)
-    While this may be desirable behaviour in many circumstances, it can easily become a bottleneck, especially if the same secret is accessed multiple times.
-    In this situation, it is recommended to retrieve the secret from Vault externally and then send it into NSOD through another source.
-
-    Performance impacts should otherwise be negligible unless thousands of open() calls are being made. (???)
     Performance may actually be improved (potentially greatly) if NSOD intercepts open() calls that would otherwise lead to slow reads off of disk.
