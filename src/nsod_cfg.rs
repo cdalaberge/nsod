@@ -28,7 +28,7 @@ impl NsodCfg {
         for route in &self.inject.routes {
             let this_path = std::path::Path::new(&route.path);
             if !this_path.is_absolute() {
-                println!("Validation failed: route path {0} is not absolute.", route.path);
+                println!("NSOD Wrapper: Validation failed: route path {0} is not absolute.", route.path);
                 return false;
             }
         }
@@ -75,10 +75,10 @@ impl NsodCfg {
 impl NsodCfgInject {
     pub fn secret_query(&self, path: &str) -> Option<Vec<u8>> {
 
-        let abs_path = canonicalize(path).expect("NSOD: Open was called with an invalid path"); // We actually might be able to handle this one by returning -1...
+        let abs_path = canonicalize(path).expect("NSOD: Open was called with an invalid path"); // We actually might be able to handle this by returning -1...
 
         for route in self.routes.iter() {
-            if abs_path == canonicalize(&route.path).expect("NSOD: inavlid path in cfg.") { // This expect should never trigger since we validate all paths.
+            if abs_path == canonicalize(&route.path).expect("NSOD: inavlid path in cfg.") { // This expect should never trigger since we validate all route paths.
                 return Some(route.source.get_secret()); // Path in cfg: get secret from source.
             }
         }
