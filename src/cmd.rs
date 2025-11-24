@@ -1,10 +1,11 @@
 use std::collections::HashMap;
+use std::fs::{self, remove_file};
 use std::str::FromStr;
 
 use clearscreen::clear;
 use url::Url;
 
-use crate::ui;
+use crate::{base_cfg_dir_path, ui};
 use crate::nsod_cfg::{NsodCfg};
 use crate::route::{NsodRoute, NsodSource, SimpleSource};
 
@@ -18,22 +19,68 @@ pub fn __nsod_configure_main () -> Result<i32, Box<dyn std::error::Error>> {
     clear()?;
     loop {
         ui::print_from_key_interactive("cfg_start", db)?;
-        match ui::get_input_i32(0, 3)? {
+        match ui::get_input_i32(0, 2)? {
             0 => return Ok(0),
             1 => {
                 __nsod_create_cfg(db)?;
             },
             2 => {
-                //__nsod_ui_edit_cfg()?;
-            },
-            3 => {
-                //__nsod_ui_delete_cfg()?;
+                __nsod_delete_cfg(db)?;
             },
             _ => {
             },
         }
         clear()?;
     }
+}
+
+
+pub fn __nsod_delete_cfg(db: &HashMap<String, String>) -> Result<(), Box<dyn std::error::Error>> {
+    let names = __nsod_list_cfg(db)?;
+
+    ui::print_from_key_interactive("cfg_delete", db)?;
+    let delete_name = ui::get_input_string()?;
+
+    let cfg_dir = base_cfg_dir_path!();
+
+    for name in names {
+        if name == delete_name {
+            remove_file(format!("{cfg_dir}/{delete_name}_inject.json"))?;
+            remove_file(format!("{cfg_dir}/{delete_name}_wrapper.json"))?;
+            break;
+        }
+    }
+
+    clear()?; // clearscreen
+    return Ok(());
+}
+
+
+pub fn __nsod_list_cfg(db: &HashMap<String, String>) -> Result<Vec<String>, Box<dyn std::error::Error>> {
+    ui::print_from_key("cfg_list", db)?;
+    
+    let files = fs::read_dir(base_cfg_dir_path!())?;
+    let mut names: Vec<String> = Vec::new();
+
+    for file in files {
+        if file.as_ref().unwrap().path().is_file() {
+            let path = file.unwrap().path();
+            let filename = path.file_name().unwrap().to_str().unwrap();
+            let filename_len = filename.len();
+
+            let t1 = &filename[filename_len - 12..filename_len];
+
+            if t1 == "_inject.json" {
+                names.push(String::from_str(&filename[0..filename_len-12])?);
+            }
+        }
+    }
+
+    for name in &names {
+        println!("{}", name);
+    }
+
+    return Ok(names);
 }
 
 

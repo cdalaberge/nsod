@@ -17,6 +17,13 @@ pub fn print_interactive(line: &str) -> Result<(), Box<dyn std::error::Error>> {
     return Ok(());
 }
 
+pub fn print_from_key(key: &str, db: &HashMap<String, String>) -> Result<(), Box<dyn std::error::Error>> {
+    if db.contains_key(key) {
+        println!("{}", db.get(key).unwrap());
+    }
+    return Ok(());
+}
+
 pub fn print_from_key_interactive(key: &str, db: &HashMap<String, String>) -> Result<(), Box<dyn std::error::Error>> {
     if db.contains_key(key) {
         println!("{}", db.get(key).unwrap());

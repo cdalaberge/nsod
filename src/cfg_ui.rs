@@ -10,6 +10,7 @@ macro_rules! db_en {
             "cfg_route",
             "cfg_add_route",
             "cfg_source",
+            "cfg_list",
 
             "input_src_env",
             "input_src_file",
