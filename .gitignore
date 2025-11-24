@@ -1,2 +1,3 @@
 /target
-/dev
+/dev/libnsod_open_hook.so
+/dev/libnsod_rust.so
