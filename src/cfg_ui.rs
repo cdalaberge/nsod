@@ -11,6 +11,7 @@ macro_rules! db_en {
             "cfg_add_route",
             "cfg_source",
             "cfg_list",
+            "path_not_absolute",
 
             "input_src_env",
             "input_src_file",

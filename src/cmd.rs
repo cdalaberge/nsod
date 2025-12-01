@@ -111,7 +111,18 @@ pub fn __nsod_add_route(cfg: &mut NsodCfg, db: &HashMap<String, String>) -> Resu
     
     // get path
     ui::print_from_key_interactive("cfg_route", db)?;
-    route.path = ui::get_input_string()?;
+    
+    loop {
+        route.path = ui::get_input_string()?;
+        
+        let this_path = std::path::Path::new(&route.path);
+            if !this_path.is_absolute() {
+                ui::print_from_key_interactive("path_not_absolute", db)?;
+            }
+            else {
+                break;
+            }
+    }
 
     // get source
     route.source = __nsod_get_source(db)?;
