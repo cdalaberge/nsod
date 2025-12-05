@@ -1,1 +1,0 @@
-{"bin_path":"/bin/cat","routes":[{"path":"./joker","source":{"EnvironmentVariable":"_HOOK_OPEN_JOKER"}}]}

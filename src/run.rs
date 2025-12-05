@@ -46,7 +46,7 @@ pub fn __nsod_run (argv: &Vec<String>) -> Result<i32, Box<dyn std::error::Error>
     exec_envp.push(CString::new(format!("{cfg_key}={cfg_string}"))?);
 
     // Inject LD_PRELOAD
-    exec_envp.push(CString::new("LD_PRELOAD=./dev/libnsod_rust.so ./dev/libnsod_open_hook.so")?);
+    exec_envp.push(CString::new("LD_PRELOAD=./out/libnsod_open_hook.so")?);
 
     execve(&exec_path, exec_argv.as_slice(), exec_envp.as_slice())?;
     return Ok(1);

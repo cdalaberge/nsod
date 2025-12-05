@@ -22,8 +22,8 @@
 			"label": "Copy rust component",
 			"command": "cp",
 			"args": [
-				"./target/debug/libnsod_rust.so",
-				"./dev"
+				"./target/debug/libnsod_rust.a",
+				"./out/libnsod_rust.a"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
@@ -43,17 +43,16 @@
 				"-fdiagnostics-color=always",
 				"-shared",
 				"-fPIC",
-				"-L.",
-				"-lnsod_rust",
 				"-I",
 				"${workspaceFolder}/c",
-				"-g",
 				"../c/nsod_open_hook.c",
 				"-o",
-				"libnsod_open_hook.so"
+				"libnsod_open_hook.so",
+				"-L.",
+				"-l:libnsod_rust.a"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}/dev"
+				"cwd": "${workspaceFolder}/out"
 			},
 			"problemMatcher": [
 				"$gcc"
