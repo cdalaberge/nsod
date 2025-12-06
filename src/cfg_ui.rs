@@ -39,20 +39,20 @@ macro_rules! interact_char {
 #[macro_export]
 macro_rules! base_ui_dir_path {
     () => {
-        "/home/cdal/nsod/misc"
+        ".nsod/ui"
     };
 }
 
 #[macro_export]
 macro_rules! usage_path {
     () => {
-        "./misc/en/usage.txt"
+        ".nsod/ui/en/usage.txt"
     };
 }
 
 #[macro_export]
 macro_rules! help_path {
     () => {
-        "./misc/en/README_en.txt"
+        ".nsod/ui/en/README_en.txt"
     };
 }

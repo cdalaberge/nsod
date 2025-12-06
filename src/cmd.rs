@@ -41,7 +41,7 @@ pub fn __nsod_delete_cfg(db: &HashMap<String, String>) -> Result<(), Box<dyn std
     ui::print_from_key_interactive("cfg_delete", db)?;
     let delete_name = ui::get_input_string()?;
 
-    let cfg_dir = base_cfg_dir_path!();
+    let cfg_dir = &ui::path_from_home(base_cfg_dir_path!());
 
     for name in names {
         if name == delete_name {
@@ -59,7 +59,7 @@ pub fn __nsod_delete_cfg(db: &HashMap<String, String>) -> Result<(), Box<dyn std
 pub fn __nsod_list_cfg(db: &HashMap<String, String>) -> Result<Vec<String>, Box<dyn std::error::Error>> {
     ui::print_from_key("cfg_list", db)?;
     
-    let files = fs::read_dir(base_cfg_dir_path!())?;
+    let files = fs::read_dir(ui::path_from_home(base_cfg_dir_path!()))?;
     let mut names: Vec<String> = Vec::new();
 
     for file in files {
@@ -153,7 +153,7 @@ pub fn __nsod_create_cfg(db: &HashMap<String, String>) -> Result<(), Box<dyn std
         }
     }
 
-    cfg.export(&name, crate::base_cfg_dir_path!())?;
+    cfg.export(&name, &ui::path_from_home(crate::base_cfg_dir_path!()))?;
 
     clear()?; // clearscreen
     return Ok(());

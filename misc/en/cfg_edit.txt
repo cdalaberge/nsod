@@ -1,5 +1,0 @@
-=================================
-Please enter the name of the configuration you wish to edit.
-If the specified configuration files do not exist, they will be created instead.
-
-Enter config name:

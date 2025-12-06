@@ -7,6 +7,7 @@ pub mod ui;
 pub mod cmd;
 pub mod cfg_ui;
 pub mod cfg_lib;
+pub mod cfg_install;
 pub mod run;
 
 fn main() {

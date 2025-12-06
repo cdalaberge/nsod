@@ -3,7 +3,7 @@ use std::str::FromStr;
 
 use nix::unistd::execve;
 
-use crate::ui::{ __nsod_usage};
+use crate::ui::{ __nsod_usage, path_from_home};
 use crate::nsod_cfg::{NsodCfg};
 
 // Exec target with cfg matching argv[2].
@@ -15,7 +15,7 @@ pub fn __nsod_run (argv: &Vec<String>) -> Result<i32, Box<dyn std::error::Error>
         return Ok(1);
     }
 
-    let cfg = NsodCfg::from_import(&argv[2], crate::base_cfg_dir_path!())?;
+    let cfg = NsodCfg::from_import(&argv[2], &path_from_home(crate::base_cfg_dir_path!()))?;
 
     if !cfg.validate() {
         println!("Exiting...");
@@ -45,8 +45,17 @@ pub fn __nsod_run (argv: &Vec<String>) -> Result<i32, Box<dyn std::error::Error>
     let cfg_key = String::from_str(crate::cfg_env!())?;
     exec_envp.push(CString::new(format!("{cfg_key}={cfg_string}"))?);
 
+
+
     // Inject LD_PRELOAD
-    exec_envp.push(CString::new("LD_PRELOAD=./out/libnsod_open_hook.so")?);
+    if crate::cfg_ld_abs_path!() {
+        let ld_path: &str = crate::cfg_ld_path!();
+        exec_envp.push(CString::new(format!("LD_PRELOAD={ld_path}"))?);
+    }
+    else {
+        let ld_path: &str = &path_from_home(crate::cfg_ld_path!());
+        exec_envp.push(CString::new(format!("LD_PRELOAD={ld_path}"))?);
+    }
 
     execve(&exec_path, exec_argv.as_slice(), exec_envp.as_slice())?;
     return Ok(1);

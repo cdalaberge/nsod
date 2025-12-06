@@ -1,0 +1,7 @@
+Welcome to the NSOD configurator!
+=================================
+Please select an option:
+(1): Create new config.
+(2): Delete config.
+...
+(0): Exit.

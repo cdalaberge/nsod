@@ -9,6 +9,6 @@ macro_rules! cfg_env {
 #[macro_export]
 macro_rules! base_cfg_dir_path {
     () => {
-        "/home/cdal/.nsod"
+        ".nsod/cfg"
     };
 }
