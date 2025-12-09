@@ -1,1 +1,5 @@
-/target /out
+/target/
+/build/
+/nsod_pkg/build/
+/nsod_pkg/ui/
+nsod_pkg.tar.gz
