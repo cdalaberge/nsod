@@ -4,7 +4,7 @@ install_system:
 
 	mkdir -p /usr/lib/nsod
 
-	cp -r ui /usr/lib/nsod/ui
+	cp -r ui /usr/lib/nsod
 	cp build/libnsod_open_hook.so /usr/lib/nsod
 
 	mkdir -p /etc/nsod
@@ -21,7 +21,7 @@ install_user:
 
 	cp build/libnsod_open_hook.so ~/.nsod/lib
 
-	cp -r ui ~/.nsod/lib/ui
+	cp -r ui ~/.nsod/lib
 	
 	echo "user install finished";
 

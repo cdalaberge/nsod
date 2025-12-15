@@ -129,7 +129,18 @@ pub fn __nsod_add_route(cfg: &mut NsodCfg, db: &HashMap<String, String>) -> Resu
 
 pub fn __nsod_create_cfg(db: &HashMap<String, String>) -> Result<(), Box<dyn std::error::Error>> {
     ui::print_from_key_interactive("cfg_create", db)?;
-    let name = ui::get_input_string()?;
+
+    let mut name = ui::get_input_string()?;
+    loop {
+        if name.contains(".") || name.contains("/") {
+            ui::print_from_key_interactive("cfg_bad_name", db)?;
+            name = ui::get_input_string()?;
+            continue;
+        }
+        else {
+            break;
+        }
+    }
 
     let mut cfg = NsodCfg::new();
     

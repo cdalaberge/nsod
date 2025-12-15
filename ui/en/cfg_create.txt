@@ -1,5 +1,5 @@
 =================================
-Please enter a name for this configuration (alphanumerics only).
+Please enter a path-safe name for this configuration.
 The name of the binary you are going to hook often works well, e.g. "nginx" or "nginx_cfg_1".
 
 This will be used to create two files in ~/.nsod:

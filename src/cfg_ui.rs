@@ -4,6 +4,7 @@ macro_rules! db_en {
         [
             "cfg_start",
             "cfg_create",
+            "cfg_bad_name",
             "cfg_edit",
             "cfg_delete",
             "cfg_bin",
