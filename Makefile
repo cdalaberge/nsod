@@ -47,9 +47,11 @@ build_user: build/nsod_user build/libnsod_open_hook.so
 
 
 package: build
-	cp -r ./build ./nsod_pkg/build
-	cp -r ./ui ./nsod_pkg/ui
-	tar -czf nsod_pkg.tar.gz ./nsod_pkg
+	mkdir -p ~/nsod_pkg
+	cp -r . ~/nsod_pkg
+	rm -r ~/nsod_pkg/target
+
+	tar -czvf ~/nsod_pkg.tar.gz ~/nsod_pkg
 
 build/libnsod_open_hook.so: build/libnsod_rust.a c/nsod_open_hook.c c/nsod_rust.h
 	gcc -shared -fPIC -I c c/nsod_open_hook.c -o build/libnsod_open_hook.so -L./build -l:libnsod_rust.a
