@@ -34,25 +34,3 @@ macro_rules! interact_char {
         ">"
     };
 }
-
-
-#[macro_export]
-macro_rules! base_ui_dir_path {
-    () => {
-        ".nsod/ui"
-    };
-}
-
-#[macro_export]
-macro_rules! usage_path {
-    () => {
-        ".nsod/ui/en/usage.txt"
-    };
-}
-
-#[macro_export]
-macro_rules! help_path {
-    () => {
-        ".nsod/ui/en/README_en.txt"
-    };
-}

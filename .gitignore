@@ -2,4 +2,4 @@
 /build/
 /nsod_pkg/build/
 /nsod_pkg/ui/
-nsod_pkg.tar.gz
+/src/cfg_install_path.rs

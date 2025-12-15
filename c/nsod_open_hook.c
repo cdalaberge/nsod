@@ -1,6 +1,6 @@
 #include <dlfcn.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -10,8 +10,11 @@
 #include <nsod_rust.h>
 
 #define OPEN_SYMBOL "open"
+#define FOPEN_SYMBOL "fopen"
 
-int __hook_call_libc_open (const char * path, int flags, int mode) {
+// Call next loaded function with the symbol "open" (usually from libc).
+// Usually called when we decide not to intercept the original open call.
+int __nsod_fallback_open(const char * path, int flags, int mode) {
 
     dlerror(); // Clear any existing errors.
 
@@ -23,7 +26,12 @@ int __hook_call_libc_open (const char * path, int flags, int mode) {
         exit(1);
     }
 
-    if (libc_open == NULL) { // Theoretically dlsym could return NULL without error as symbols can have address zero, we wouldn't want to actually call the function if that was the case though.
+    /*
+    Theoretically dlsym could return NULL without error as symbols can have address zero.
+    We wouldn't want to actually call the function if that was the case though.
+    */
+    if (libc_open == NULL) {
+        puts("NSOD: open symbol with address NULL.");
         exit(1); 
     }
 
@@ -33,38 +41,92 @@ int __hook_call_libc_open (const char * path, int flags, int mode) {
 int open(const char * path, int flags, ...) {
     // If needed, get the optional 'mode' argument
     int mode;
-    if (__OPEN_NEEDS_MODE (flags))
-    {
-        va_list arg;
-        va_start(arg, flags);
-        mode = va_arg(arg, int);
-        va_end(arg);
+    if (__OPEN_NEEDS_MODE (flags)) {
+        va_list args;
+        va_start(args, flags);
+        mode = va_arg(args, int);
+        va_end(args);
+    }
+
+    // Only hook open if in readonly mode, as we have no way to handle creating/writing to an actual file.
+    if (flags != O_RDONLY) { 
+        return __nsod_fallback_open(path, flags, mode);
     }
 
 
-    if (flags != O_RDONLY) { // Only hook open if in readonly mode, as we have no way to handle creating/writing to an actual file.
-        return __hook_call_libc_open(path, flags, mode);
-    }
-
-
-    // Prepare pipe. It's worth doing this before we know if we're actually doing the hook to avoid having to parse cfg twice.
+    // It's worth doing this before we know if we're actually doing the hook to avoid having to parse cfg twice.
     int pipe_fds[2];
     if (pipe(pipe_fds) != 0) {
-        return(-1); // failing to open a pipe should be handled the same as failing to open any other file.
+        return(-1); // Non-normal return. Errno will be set by the pipe() function.
+    }
+    int pipe_write = pipe_fds[1];
+    int pipe_read = pipe_fds[0];
+        
+    int rust_result = __nsod_rust_request(path, pipe_write);
+    close(pipe_write);
+
+    // Handle results from rust function call:
+    if (rust_result != 0) { // Non-normal return.
+        close(pipe_read);
+        return __nsod_fallback_open(path, flags, mode);
+    }
+
+    return(pipe_read); // Normal return: return fd with secret.
+}
+
+
+// Call next loaded function with the symbol "fopen" (usually from libc).
+// Usually called when we decide not to intercept the original fopen call.
+FILE * __nsod_fallback_fopen(const char * path, const char * mode) {
+
+    dlerror(); // Clear any existing errors.
+
+    FILE * (*libc_fopen)(const char *, const char *) = dlsym(RTLD_NEXT, FOPEN_SYMBOL); // Find the next loaded 'fopen' function after this one.
+
+    char * e = dlerror(); // e will be NULL if no error occured, or a string describing the error if one did occur.
+    if (e != NULL) { 
+        puts(e);
+        exit(1);
+    }
+
+    /*
+    Theoretically dlsym could return NULL without error as symbols can have address zero.
+    We wouldn't want to actually call the function if that was the case though.
+    */
+    if (libc_fopen == NULL) {
+        puts("NSOD: open symbol with address NULL.");
+        exit(1); 
+    }
+
+    return (libc_fopen(path, mode));
+}
+
+
+FILE * fopen(const char * path, const char * mode) {
+
+    // Only hook if in readonly mode, as we have no way to handle creating/writing to an actual file.
+    if (strncmp(mode, "r", 2) != 0) { 
+        return __nsod_fallback_fopen(path, mode);
+    }
+
+
+    // It's worth doing this before we know if we're actually doing the hook to avoid having to parse cfg twice.
+    int pipe_fds[2];
+    if (pipe(pipe_fds) != 0) {
+        return(NULL); // Non-normal return. Errno will be set by the pipe() function.
     }
     int pipe_write = pipe_fds[1];
     int pipe_read = pipe_fds[0];
         
     
-    // call rust function here:
     int rust_result = __nsod_rust_request(path, pipe_write);
     close(pipe_write);
 
     // Handle results from rust function call:
-    if (rust_result != 0) { // abnormal result: fall back to libc open
+    if (rust_result != 0) { // Non-normal return.
         close(pipe_read);
-        return __hook_call_libc_open(path, flags, mode);
+        return __nsod_fallback_fopen(path, mode);
     }
 
-    return(pipe_read); // normal result: return fd with secret
+    return(fdopen(pipe_read, "r")); // Normal return: return FILE from fd, filled with secret.
 }

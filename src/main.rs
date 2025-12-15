@@ -1,13 +1,13 @@
 use std::env;
 use std::process::exit;
 
-pub mod nsod_cfg;
+pub mod cfg_struct;
 pub mod route;
 pub mod ui;
-pub mod cmd;
+pub mod cli;
 pub mod cfg_ui;
-pub mod cfg_lib;
-pub mod cfg_install;
+pub mod cfg_core;
+pub mod cfg_install_path;
 pub mod run;
 
 fn main() {
@@ -18,7 +18,7 @@ fn main() {
         let mode: &str = &argv[1];
         match mode {
             "configure" => {
-                result = cmd::__nsod_configure_main();
+                result = cli::__nsod_configure_main();
             }
             "run" => {
                 result = run::__nsod_run(&argv); // Will not return unless error occurs.

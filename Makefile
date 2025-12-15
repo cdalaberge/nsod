@@ -1,30 +1,48 @@
-install_system: create_user_dir
+install_system: 
 	cp build/nsod_system /usr/bin
 	ln -sf /usr/bin/nsod_system /usr/bin/nsod
 
 	mkdir -p /usr/lib/nsod
+
+	cp -r ui /usr/lib/nsod/ui
 	cp build/libnsod_open_hook.so /usr/lib/nsod
+
+	mkdir -p /etc/nsod
 
 	echo "system install finished"
 
-install_user: create_user_dir
+install_user: 
+	mkdir -p ~/.nsod/cfg
 	mkdir -p ~/.nsod/bin
+	mkdir -p ~/.nsod/lib
+
 	cp build/nsod_user ~/.nsod/bin
 	ln -sf ~/.nsod/bin/nsod_user ~/.nsod/bin/nsod
 
-	mkdir -p ~/.nsod/lib
 	cp build/libnsod_open_hook.so ~/.nsod/lib
 
+	cp -r ui ~/.nsod/lib/ui
+	
 	echo "user install finished";
 
 
-build: build/nsod_system build/nsod_user build/libnsod_open_hook.so src/cfg_lib.rs src/cfg_ui.rs src/cmd.rs src/lib.rs src/main.rs src/nsod_cfg.rs src/route.rs src/route.rs src/run.rs src/ui.rs Cargo.toml
+uninstall_system:
+	rm /usr/bin/nsod
+	rm /usr/bin/nsod_system
+
+	rm -r /usr/lib/nsod
+	rm -r /etc/nsod
+
+uninstall_user:
+	rm -r ~/.nsod
+
+build: build/nsod_system build/nsod_user build/libnsod_open_hook.so
 	echo "build finished"
 
-build_system: build/nsod_system build/libnsod_open_hook.so src/cfg_lib.rs src/cfg_ui.rs src/cmd.rs src/lib.rs src/main.rs src/nsod_cfg.rs src/route.rs src/route.rs src/run.rs src/ui.rs Cargo.toml
+build_system: build/nsod_system build/libnsod_open_hook.so
 	echo "build for system finished"
 
-build_user: build/nsod_user build/libnsod_open_hook.so src/cfg_lib.rs src/cfg_ui.rs src/cmd.rs src/lib.rs src/main.rs src/nsod_cfg.rs src/route.rs src/route.rs src/run.rs src/ui.rs Cargo.toml
+build_user: build/nsod_user build/libnsod_open_hook.so
 	echo "build for user finished"
 
 
@@ -58,14 +76,7 @@ build/nsod_user: install_cfg_user
 
 
 install_cfg_user: cfg_install/user.rs
-	cp cfg_install/user.rs src/cfg_install.rs
+	cp cfg_install/user.rs src/cfg_install_path.rs
 
 install_cfg_system: cfg_install/system.rs
-	cp cfg_install/system.rs src/cfg_install.rs
-
-fake:
-	echo "triggered fake target"
-
-create_user_dir:
-	mkdir -p ~/.nsod/cfg
-	cp -r ui ~/.nsod/ui
+	cp cfg_install/system.rs src/cfg_install_path.rs

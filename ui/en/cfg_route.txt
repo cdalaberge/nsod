@@ -10,4 +10,14 @@ NSOD supports an arbitrary number of routes, each linking a single path to a sin
 If multiple routes specify the same path, only the first route will be used.
 Multiple routes *can* use the same source.
 
+NSOD evaluates paths without consulting the underlying filesystem.
+This means that files and directories specified in routes *DO NOT* have to exist.
+However, this also means that symlinks cannot be followed and /../ in paths cannot be evaluated.
+
+To intercept an open call accessing a file via a symlink, provide the path to the symlink.
+To intercept an open call using a path like "../../etc/secret", *KEEP* the /../'s and prepend the current working directory.
+
+For example, if the above path was open()'d from the directory "/home/user1",
+the call could be intercepted with the path "/home/user1/../../etc/secret" but *NOT* with the path "/etc/secret".
+
 Enter absolute path to intercept:

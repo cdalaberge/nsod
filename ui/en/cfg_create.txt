@@ -2,7 +2,7 @@
 Please enter a name for this configuration (alphanumerics only).
 The name of the binary you are going to hook often works well, e.g. "nginx" or "nginx_cfg_1".
 
-This will be used to create two files in [user home directory]/.nsod:
+This will be used to create two files in ~/.nsod:
     [name]_inject.json -> Data that is injected into the hooked process.
     [name]_wrapper.json -> Data that is used by the NSOD wrapper while launching the hooked process.
 

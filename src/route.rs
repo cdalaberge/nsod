@@ -16,7 +16,7 @@ pub enum NsodSource {
 #[derive(Serialize, Deserialize)]
 pub enum SimpleSource {
     EnvironmentVariable(String),
-    File(String), // This is just a regular open again, BUT the target can be any file (including tmpfs, which is RAM-only). Useful when a path is hardcoded.
+    File(String),
 }
 
 

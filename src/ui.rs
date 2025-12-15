@@ -1,9 +1,7 @@
 use std::collections::HashMap;
 use std::fs::read;
 use std::io::{self, Write};
-use std::env;
 
-//use clearscreen::clear;
 use crate::{base_ui_dir_path, db_en, db_set, help_path, interact_char, usage_path};
 
 pub fn print_from_file(path: &str) -> Result<(), Box<dyn std::error::Error>> {
@@ -34,15 +32,12 @@ pub fn print_from_key_interactive(key: &str, db: &HashMap<String, String>) -> Re
     return Ok(());
 }
 
-pub fn path_from_home(path: &str) -> String {
-    let home = env::var("HOME").expect("NSOD: Requires HOME enviroment variable to be set.");
-    return format!("{home}/{path}");
-}
 
+// Prepare a database using text files specified in cfg_ui.rs.
 pub fn load_db() -> Result<HashMap<String, String>, Box<dyn std::error::Error>> {
     let mut db: HashMap<String, String> = HashMap::new();
 
-    let basepath = path_from_home(base_ui_dir_path!());
+    let basepath = base_ui_dir_path!();
     let lang = db_set!();
 
     for name in db_en!() {
@@ -107,11 +102,11 @@ pub fn get_input_string() -> Result<String, Box<dyn std::error::Error>> {
 
 pub fn __nsod_help () -> Result<i32, Box<dyn std::error::Error>> {
     __nsod_usage()?; // Print basic usage first
-    print_from_file(&path_from_home(help_path!()))?;
+    print_from_file(&help_path!())?;
     return Ok(0);
 }
 
 pub fn __nsod_usage () -> Result<i32, Box<dyn std::error::Error>> {
-    print_from_file(&path_from_home(usage_path!()))?;
+    print_from_file(&usage_path!())?;
     return Ok(0);
 }

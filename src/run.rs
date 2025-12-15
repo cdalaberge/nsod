@@ -3,19 +3,20 @@ use std::str::FromStr;
 
 use nix::unistd::execve;
 
-use crate::ui::{ __nsod_usage, path_from_home};
-use crate::nsod_cfg::{NsodCfg};
+use crate::ui::{ __nsod_usage};
+use crate::cfg_struct::{NsodCfg};
 
 // Exec target with cfg matching argv[2].
 // Does not return on success.
 pub fn __nsod_run (argv: &Vec<String>) -> Result<i32, Box<dyn std::error::Error>> {
     
-    if argv.len() < 3 {
+    let min_argv = 3; // argv[0], run, target.
+    if argv.len() < min_argv {
         __nsod_usage()?;
         return Ok(1);
     }
 
-    let cfg = NsodCfg::from_import(&argv[2], &path_from_home(crate::base_cfg_dir_path!()))?;
+    let cfg = NsodCfg::from_import(&argv[2], &crate::base_cfg_dir_path!())?;
 
     if !cfg.validate() {
         println!("Exiting...");
@@ -28,7 +29,7 @@ pub fn __nsod_run (argv: &Vec<String>) -> Result<i32, Box<dyn std::error::Error>
     let mut exec_argv: Vec<CString> = Vec::new();
     exec_argv.push(exec_path.clone()); // set argv[0] to same bin path
 
-    for i in 3..argv.len() {
+    for i in min_argv..argv.len() {
         exec_argv.push(CString::new(argv[i].clone())?);
     }
 
@@ -46,16 +47,8 @@ pub fn __nsod_run (argv: &Vec<String>) -> Result<i32, Box<dyn std::error::Error>
     exec_envp.push(CString::new(format!("{cfg_key}={cfg_string}"))?);
 
 
-
-    // Inject LD_PRELOAD
-    if crate::cfg_ld_abs_path!() {
-        let ld_path: &str = crate::cfg_ld_path!();
-        exec_envp.push(CString::new(format!("LD_PRELOAD={ld_path}"))?);
-    }
-    else {
-        let ld_path: &str = &path_from_home(crate::cfg_ld_path!());
-        exec_envp.push(CString::new(format!("LD_PRELOAD={ld_path}"))?);
-    }
+    let ld_path = crate::so_path!();
+    exec_envp.push(CString::new(format!("LD_PRELOAD={ld_path}"))?);
 
     execve(&exec_path, exec_argv.as_slice(), exec_envp.as_slice())?;
     return Ok(1);
