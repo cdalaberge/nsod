@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::fs::{self, remove_file};
 use std::str::FromStr;
 
-use url::Url;
+//use url::Url;
 
 use crate::{base_cfg_dir_path, ui};
 use crate::cfg_struct::{NsodCfg};
@@ -175,6 +175,7 @@ pub fn __nsod_create_cfg(db: &HashMap<String, String>) -> Result<(), Box<dyn std
     return Ok(());
 }
 
+/*
 pub fn __nsod_get_addr(db: &HashMap<String, String>) -> Result<Url, Box<dyn std::error::Error>> {
     loop {
         let addr_raw = Url::from_str(ui::get_input_string()?.as_str());
@@ -186,3 +187,4 @@ pub fn __nsod_get_addr(db: &HashMap<String, String>) -> Result<Url, Box<dyn std:
         }
     }
 }
+*/
