@@ -35,7 +35,18 @@ pub fn __nsod_delete_cfg(db: &HashMap<String, String>) -> Result<(), Box<dyn std
     let names = __nsod_list_cfg(db)?;
 
     ui::print_from_key_interactive("cfg_delete", db)?;
-    let delete_name = ui::get_input_string()?;
+    
+    let mut delete_name = ui::get_input_string()?;
+    loop {
+        if delete_name.contains(".") || delete_name.contains("/") {
+            ui::print_from_key_interactive("cfg_bad_name", db)?;
+            delete_name = ui::get_input_string()?;
+            continue;
+        }
+        else {
+            break;
+        }
+    }
 
     let cfg_dir = base_cfg_dir_path!();
 
