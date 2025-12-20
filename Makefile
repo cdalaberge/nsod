@@ -1,3 +1,5 @@
+# This is the most general Makefile for building and installing NSOD on the local system.
+
 install_system: 
 	cp build/nsod_system /usr/bin
 	ln -sf /usr/bin/nsod_system /usr/bin/nsod
@@ -45,9 +47,6 @@ build_system: build/nsod_system build/libnsod_open_hook.so
 build_user: build/nsod_user build/libnsod_open_hook.so
 	echo "build for user finished"
 
-
-package:
-	tar -czvf ~/nsod_pkg.tar.gz --exclude="$(PWD)/target" --exclude="$(PWD)/.git" --exclude="$(PWD)/build" "$(PWD)"
 
 build/libnsod_open_hook.so: build/libnsod_rust.a c/nsod_open_hook.c c/nsod_rust.h
 	gcc -shared -fPIC -I c c/nsod_open_hook.c -o build/libnsod_open_hook.so -L./build -l:libnsod_rust.a
