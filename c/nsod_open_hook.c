@@ -65,7 +65,6 @@ int open(const char * path, int flags, ...) {
     int pipe_read = pipe_fds[0];
         
     int rust_result = __nsod_rust_request(path, pipe_write);
-    close(pipe_write);
 
     // Handle results from rust function call:
     if (rust_result != 0) { // Non-normal return.
@@ -127,7 +126,6 @@ int open64(const char * path, int flags, ...) {
     int pipe_read = pipe_fds[0];
         
     int rust_result = __nsod_rust_request(path, pipe_write);
-    close(pipe_write);
 
     // Handle results from rust function call:
     if (rust_result != 0) { // Non-normal return.
@@ -187,7 +185,6 @@ FILE * fopen(const char * path, const char * mode) {
         
     
     int rust_result = __nsod_rust_request(path, pipe_write);
-    close(pipe_write);
 
     // Handle results from rust function call:
     if (rust_result != 0) { // Non-normal return.
