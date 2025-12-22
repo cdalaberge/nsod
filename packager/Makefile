@@ -9,7 +9,6 @@ final_pkg:
 	tar -czf "./$(pkg_name).tar.gz" "./nsod"
 
 
-
 arm32: cargo_target = armv7-unknown-linux-gnueabihf
 arm32: target_glibc_version = .2.31
 arm32: zcc_target = arm-linux-gnueabihf
