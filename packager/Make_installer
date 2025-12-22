@@ -1,42 +1,42 @@
 # This Makefile is included with binary packages to handle installation only.
 
-install_system: 
-	cp nsod_system /usr/bin
+system_install: 
+	cp build/nsod_system /usr/bin
 	ln -sf /usr/bin/nsod_system /usr/bin/nsod
 
 	mkdir -p /usr/lib/nsod
 
 	cp -r ui /usr/lib/nsod
-	cp libnsod_open_hook.so /usr/lib/nsod
+	cp build/libnsod_open_hook.so /usr/lib/nsod
 
 	mkdir -p /etc/nsod
 
 	echo "system install finished"
 
-install_user: 
-	mkdir -p ~/.nsod/cfg
-	mkdir -p ~/.nsod/bin
-	mkdir -p ~/.nsod/lib
+user_install: 
+	mkdir -p "$(HOME)/.nsod/cfg"
+	mkdir -p "$(HOME)/.nsod/bin"
+	mkdir -p "$(HOME)/.nsod/lib"
 
-	cp nsod_user ~/.nsod/bin
-	ln -sf ~/.nsod/bin/nsod_user ~/.nsod/bin/nsod
+	cp build/nsod_user "$(HOME)/.nsod/bin"
+	ln -sf "$(HOME)/.nsod/bin/nsod_user" "$(HOME)/.nsod/bin/nsod"
 
-	cp libnsod_open_hook.so ~/.nsod/lib
+	cp build/libnsod_open_hook.so "$(HOME)/.nsod/lib"
 
-	cp -r ui ~/.nsod/lib
+	cp -r ui "$(HOME)/.nsod/lib"
 	
 	echo "user install finished";
 
 
-uninstall_system:
-	rm /usr/bin/nsod
-	rm /usr/bin/nsod_system
+system_uninstall:
+	rm -f /usr/bin/nsod
+	rm -f /usr/bin/nsod_system
 
-	rm -r /usr/lib/nsod
-	rm -r /etc/nsod
+	rm -rf /usr/lib/nsod
+	rm -rf /etc/nsod
 
-uninstall_user:
-	rm -r ~/.nsod
+user_uninstall:
+	rm -rf "$(HOME)/.nsod"
 
 
 # may be needed for compatiblity with older libc versions.

@@ -1,6 +1,6 @@
 # This is the most general Makefile for building and installing NSOD on the local system.
 
-install_system: 
+system_install: 
 	cp build/nsod_system /usr/bin
 	ln -sf /usr/bin/nsod_system /usr/bin/nsod
 
@@ -13,38 +13,38 @@ install_system:
 
 	echo "system install finished"
 
-install_user: 
-	mkdir -p ~/.nsod/cfg
-	mkdir -p ~/.nsod/bin
-	mkdir -p ~/.nsod/lib
+user_install: 
+	mkdir -p "$(HOME)/.nsod/cfg"
+	mkdir -p "$(HOME)/.nsod/bin"
+	mkdir -p "$(HOME)/.nsod/lib"
 
-	cp build/nsod_user ~/.nsod/bin
-	ln -sf ~/.nsod/bin/nsod_user ~/.nsod/bin/nsod
+	cp build/nsod_user "$(HOME)/.nsod/bin"
+	ln -sf "$(HOME)/.nsod/bin/nsod_user" "$(HOME)/.nsod/bin/nsod"
 
-	cp build/libnsod_open_hook.so ~/.nsod/lib
+	cp build/libnsod_open_hook.so "$(HOME)/.nsod/lib"
 
-	cp -r ui ~/.nsod/lib
+	cp -r ui "$(HOME)/.nsod/lib"
 	
 	echo "user install finished";
 
 
-uninstall_system:
-	rm /usr/bin/nsod
-	rm /usr/bin/nsod_system
+system_uninstall:
+	rm -f /usr/bin/nsod
+	rm -f /usr/bin/nsod_system
 
-	rm -r /usr/lib/nsod
-	rm -r /etc/nsod
+	rm -rf /usr/lib/nsod
+	rm -rf /etc/nsod
 
-uninstall_user:
-	rm -r ~/.nsod
+user_uninstall:
+	rm -rf "$(HOME)/.nsod"
 
 build: build/nsod_system build/nsod_user build/libnsod_open_hook.so
 	echo "build finished"
 
-build_system: build/nsod_system build/libnsod_open_hook.so
+system_build: build/nsod_system build/libnsod_open_hook.so
 	echo "build for system finished"
 
-build_user: build/nsod_user build/libnsod_open_hook.so
+user_build: build/nsod_user build/libnsod_open_hook.so
 	echo "build for user finished"
 
 
