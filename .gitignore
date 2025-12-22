@@ -3,4 +3,4 @@
 /src/cfg_install_path.rs
 /packager/nsod/
 /packager/tmp/
-/packager/nsod_arm32.tar.g
+/packager/*.gz
