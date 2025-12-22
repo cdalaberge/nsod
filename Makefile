@@ -48,8 +48,9 @@ build_user: build/nsod_user build/libnsod_open_hook.so
 	echo "build for user finished"
 
 
+# linking dl isn't needed on most modern systems but helps with compatibility.
 build/libnsod_open_hook.so: build/libnsod_rust.a c/nsod_open_hook.c c/nsod_rust.h
-	gcc -shared -fPIC -I c c/nsod_open_hook.c -o build/libnsod_open_hook.so -L./build -l:libnsod_rust.a
+	gcc -shared -fPIC -I c c/nsod_open_hook.c -o build/libnsod_open_hook.so -L./build -l:libnsod_rust.a -ldl
 
 
 build/nsod_system: install_cfg_system

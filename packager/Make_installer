@@ -37,3 +37,8 @@ uninstall_system:
 
 uninstall_user:
 	rm -r ~/.nsod
+
+
+# may be needed for compatiblity with older libc versions.
+compile:
+	gcc -shared -fPIC -I c c/nsod_open_hook.c -o ./libnsod_open_hook.so -L. -l:libnsod_rust.a -ldl
