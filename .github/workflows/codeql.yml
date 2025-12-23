@@ -88,7 +88,9 @@ jobs:
       if: matrix.build-mode == 'manual'
       shell: bash
       run: |
-        make build
+        cp cfg_install/user.rs src/cfg_install_path.rs
+        cargo build --release --target-dir .
+        gcc -shared -fPIC -I c c/nsod_open_hook.c -o build/libnsod_open_hook.so -L. -l:libnsod_rust.a -ldl
         exit 0
 
     - name: Perform CodeQL Analysis
