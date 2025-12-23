@@ -1,5 +1,5 @@
 ====== NSOD: No Secrets On Disk ======
-NSOD is a C library hook designed to allow older third-party programs to follow modern security practices by eliminating hardcoded storage of unencrypted credentials on disk.
+NSOD is a C library hook designed to allow older third-party programs to follow modern security practices by eliminating hardcoded storage of unencrypted credentials on disk. 
 
 Functionality:
 
@@ -24,7 +24,8 @@ Compatibility:
 
 Security:
 
-    NSOD relies on LD_PRELOAD. While LD_PRELOAD does not allow for privilege escalation, it is used in some persistence techniques.
+    NSOD relies on LD_PRELOAD.
+    While LD_PRELOAD does not allow for privilege escalation, it is used in some persistence techniques.
     These techniques are not made *possible* by LD_PRELOAD, but they are made *easier*.
     As a result, LD_PRELOAD is sometimes disabled on systems where security is a priority.
     It is up to the user to decide whether this risk outweighs the benefits of more secure credential storage.
