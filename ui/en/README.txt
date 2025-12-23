@@ -39,6 +39,3 @@ Performance:
     perf stat nsod run cat [file] ran in about twice the time (0.0029 from 0.0014 seconds) as cat alone, again for a small file.
     If fast performance is needed in this case, implement your own wrapper using LD_PRELOAD
     and the nsod configuration environment variable (by default, _NSOD_CFG).
-
-    Performance may actually be improved (potentially greatly) if NSOD intercepts many open() calls that would otherwise lead to slow disk reads.
-    This may be another niche use for NSOD.
