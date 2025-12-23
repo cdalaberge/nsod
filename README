@@ -37,6 +37,7 @@ Performance:
     For context, this command results in open() being called 31 times per cycle, or about 17,000 times per second.
     
     The nsod wrapper is a bottleneck in cases where a simple command is run many times:
-    perf stat nsod run cat [file] ran in about twice the time (0.0029 from 0.0014 seconds) as cat alone, again for a small file.
+    perf stat nsod run cat [file] ran in about twice the time (0.0029 from 0.0014 seconds) as cat alone,
+    again for a small file.
     If fast performance is needed in this case, implement your own wrapper using LD_PRELOAD
     and the nsod configuration environment variable (by default, _NSOD_CFG).
