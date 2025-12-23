@@ -18,7 +18,7 @@ Compatibility:
     NSOD is Linux exclusive and relies on the LD_PRELOAD environment variable.
     This means it is INCOMPATIBLE with setuid programs.
 
-    NSOD was designed for Nginx but can hook any program using the C library functions open() and open64().
+    NSOD was designed for Nginx but can hook any program using the supported C library functions.
     This naturally includes most programs written in C and C++, but many other languages also use the C library.
     Debugging tools such as ltrace and strace may help you determine if a given program uses these functions.
 
